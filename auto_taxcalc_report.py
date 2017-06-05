@@ -437,7 +437,7 @@ def double(key1):
         return('${:,.0f}'.format(2 * float(re.sub("[^\d\.]", "", (key1)))))
 
 
-def v_table(doc):
+def v_table(doc, key1=True):
     with doc.create(LongTabu("X[c] X[c] X[c] X[c] X[c] X[c]", row_height=2.0)) as data_table:
         data_table.add_hline()
         data_table.add_row(['Elasticity of Charitable Giving',
@@ -457,12 +457,20 @@ def v_table(doc):
             key1 = key
             for key in calc_dict[key]:
                 key2 = key
-                data_table.add_row([key1,
-                                    '{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6),
-                                    '{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6),
-                                    '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
-                                    currency_fmt(num_charity(calc_dict[key1][key2])),
-                                    currency_fmt(ten_year_cost(calc_cl, calc_dict[key1][key2]))])
+                if key1 == True:
+                    data_table.add_row([key1,
+                                       '{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6),
+                                       '{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6),
+                                       '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
+                                       currency_fmt(num_charity(calc_dict[key1][key2])),
+                                       currency_fmt(ten_year_cost(calc_cl, calc_dict[key1][key2]))])
+                if key1 == False:
+                    data_table.add_row([key2,
+                                       '{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6),
+                                       '{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6),
+                                       '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
+                                       currency_fmt(num_charity(calc_dict[key1][key2])),
+                                       currency_fmt(ten_year_cost(calc_cl, calc_dict[key1][key2]))])
         data_table.add_hline()
 
 
