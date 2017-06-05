@@ -438,6 +438,14 @@ def double(key1):
 
 
 def v_table(doc, key1=True):
+    """
+    Creates a vertical table, with reforms on y-axis and metrics on x-axis
+    ----------
+    key1 : This determines the listing on the y-axis, By default it is set
+    so that key1=True.
+        key1 = True : Uses policy reforms
+        key1 = False : Uses behavioral reforms
+    """
     with doc.create(LongTabu("X[c] X[c] X[c] X[c] X[c] X[c]", row_height=2.0)) as data_table:
         data_table.add_hline()
         data_table.add_row(['Elasticity of Charitable Giving',
