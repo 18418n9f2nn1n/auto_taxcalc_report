@@ -307,16 +307,23 @@ def currency_fmt(num):
         return('${:,.1f}'.format(num))
 
 
+def verb(n):
+    """
+    Returns 'decrease' if the value is negative and 'increase' if positive.
+    """
+    n = float(n)
+    if n < 0:
+        return('decrease')
+    if n > 0:
+        return('increase')
+    if n == 0:
+        return('cause no change')
+
+
 def header(doc):
     """
     Generate the header using PyLaTex.
     """
-    paper_byline = (r'{\small {{{{' + paper_author +
-                    ' } } } | { { { ' + paper_date +
-                    ' } } } | { { ' + paper_series + ' } }}}\\\\')
-    paper_byline = NoEscape(paper_byline)
-    paper_title2 = r'\textbf{\huge ' + paper_title + '}\\\\'
-    paper_title2 = NoEscape(paper_title2)
 
     doc.append(NoEscape(r'\noindent'))
 #     doc.append(NoEscape(r'\begin{spacing}{2.00}'))
@@ -440,23 +447,24 @@ def v_table(doc):
                             'Total Charitable Contributions (billions)',
                             '10-Year Revenue Change (billions)'])
         data_table.add_hline()
-        data_table.add_row(['Current law',
-                            '{:,.1f}'.format(num_taxhike(calc_cl, calc_cl) / 10.0**6),
-                            '{:,.1f}'.format(num_ided(calc_cl) / 10.0**6),
-                            '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
-                            currency_fmt(num_charity(calc_cl)),
-                            currency_fmt(ten_year_cost(calc_cl, calc_cl))])
+#        data_table.add_row(['Current law',
+#                            '{:,.1f}'.format(num_taxhike(calc_cl, calc_cl) / 10.0**6),
+#                            '{:,.1f}'.format(num_ided(calc_cl) / 10.0**6),
+#                            '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
+#                            currency_fmt(num_charity(calc_cl)),
+#                            currency_fmt(ten_year_cost(calc_cl, calc_cl))])
         for key in calc_dict:
             key1 = key
             for key in calc_dict[key]:
                 key2 = key
-                data_table.add_row([key2,
+                data_table.add_row([key1,
                                     '{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6),
                                     '{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6),
                                     '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
                                     currency_fmt(num_charity(calc_dict[key1][key2])),
                                     currency_fmt(ten_year_cost(calc_cl, calc_dict[key1][key2]))])
         data_table.add_hline()
+
 
 def make_rows():
     row_wage = ["Wage and Salary Income"]
