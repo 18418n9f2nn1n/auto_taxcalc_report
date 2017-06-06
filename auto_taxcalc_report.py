@@ -437,14 +437,14 @@ def double(key1):
         return('${:,.0f}'.format(2 * float(re.sub("[^\d\.]", "", (key1)))))
 
 
-def v_table(doc, key1=True):
+def v_table(doc, policy_key=True):
     """
     Creates a vertical table, with reforms on y-axis and metrics on x-axis
     ----------
-    key1 : This determines the listing on the y-axis, By default it is set
+    policy_key : This determines the listing on the y-axis, By default it is set
     so that key1=True.
-        key1 = True : Uses policy reforms
-        key1 = False : Uses behavioral reforms
+        policy_key = True : Uses policy reforms
+        policy_key = False : Uses behavioral reforms
     """
     with doc.create(LongTabu("X[c] X[c] X[c] X[c] X[c] X[c]", row_height=2.0)) as data_table:
         data_table.add_hline()
@@ -465,14 +465,14 @@ def v_table(doc, key1=True):
             key1 = key
             for key in calc_dict[key]:
                 key2 = key
-                if key1 == True:
+                if policy_key == True:
                     data_table.add_row([key1,
                                        '{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6),
                                        '{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6),
                                        '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
                                        currency_fmt(num_charity(calc_dict[key1][key2])),
                                        currency_fmt(ten_year_cost(calc_cl, calc_dict[key1][key2]))])
-                if key1 == False:
+                if policy_key == False:
                     data_table.add_row([key2,
                                        '{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6),
                                        '{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6),
