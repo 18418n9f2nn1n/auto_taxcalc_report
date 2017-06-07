@@ -19,6 +19,32 @@ from pylatex import Document, PageStyle, Head, Foot, MiniPage, Section, \
                     Subsection, Math, TikZ, Axis, Plot, Figure, Matrix, Itemize
 
 
+table_vars_dict = dict([("10-Year Revenue Change (billions)",
+                         "currency_fmt(ten_year_cost_PE(calc_cl, calc_dict[key1][key2], beh_dict[key2]))"),
+                        ("10-Year Revenue Change (billions)",
+                         "currency_fmt(ten_year_cost(calc_cl, calc_dict[key1][key2]))"),
+                        ("Deduction Cap, Joint Filers",
+                         "double(key1)"),
+                        ("Itemizers (millions)",
+                         "'{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6)"),
+                        ("Taxpayers Facing Lower Marginal Tax Rate (millions)",
+                         "'{:,.1f}'.format(lwrMTR_wages(calc_cl, calc_dict[key1][key2]) / 10.0**6)"),
+                        ("Taxpayers Paying Zero or Less Income Tax (millions)",
+                         "'{:,.1f}'.format(no_inc_tax(calc_dict[key1][key2]) / 10.0**6)"),
+                        ("Taxpayers Receiving Tax Cut (millions)",
+                         "'{:,.1f}'.format(num_taxcut(calc_cl, calc_dict[key1][key2]) / 10.0**6)"),
+                        ("Taxpayers Receiving Tax Hike (millions)",
+                         "'{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6)"),
+                        ("Total Charitable Contributions (billions)",
+                         "currency_fmt(num_charity(calc_dict[key1][key2]))"),
+                        ("Wght. Ave. MTR on Charitable Contributions",
+                         "'{:.2f}'.format(100 * charity_wmtr(calc_cl))"),
+                        ("Reform",
+                         "'key1'"),
+                        ("Behavior",
+                         "'key2'")])
+
+
 def make_baseline(start_year, records_url):
     """
     Generates a baseline calculator using current law.
@@ -455,12 +481,6 @@ def v_table(doc, policy_key=True):
                             'Total Charitable Contributions (billions)',
                             '10-Year Revenue Change (billions)'])
         data_table.add_hline()
-#        data_table.add_row(['Current law',
-#                            '{:,.1f}'.format(num_taxhike(calc_cl, calc_cl) / 10.0**6),
-#                            '{:,.1f}'.format(num_ided(calc_cl) / 10.0**6),
-#                            '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
-#                            currency_fmt(num_charity(calc_cl)),
-#                            currency_fmt(ten_year_cost(calc_cl, calc_cl))])
         for key in calc_dict:
             key1 = key
             for key in calc_dict[key]:
@@ -479,6 +499,34 @@ def v_table(doc, policy_key=True):
                                        '{:.2f}'.format(100 * charity_wmtr(calc_cl)),
                                        currency_fmt(num_charity(calc_dict[key1][key2])),
                                        currency_fmt(ten_year_cost(calc_cl, calc_dict[key1][key2]))])
+        data_table.add_hline()
+
+
+def v2_table(doc, column_list=column_list, table_vars_dict=table_vars_dict):
+    global token_list
+    token_list = []
+    head_str = "X[l]"
+    for var in column_list:
+        head_str += " X[c]"
+        try:
+            token_list.append(table_vars_dict[var])
+        except ValueError:
+            print(var + ' is not a defined table variable. You must add it to the dictionary.')
+
+    # begin generating table
+    with doc.create(LongTabu(head_str, row_height=2.0)) as data_table:
+        data_table.add_hline()
+        data_table.add_row(column_list)
+        for key in calc_dict:
+            key1 = key
+            for key in calc_dict[key]:
+                    key2 = key
+                    global ex_token_list
+                    ex_token_list = []
+                    for token in token_list:
+                        ex_token = eval(token)
+                        ex_token_list.append(ex_token)
+                    data_table.add_row(ex_token_list)
         data_table.add_hline()
 
 
