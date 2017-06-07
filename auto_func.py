@@ -39,12 +39,12 @@ table_vars_dict = dict([("10-Year Revenue Change, Dynamic (billions)",
                          "currency_fmt(num_charity(calc_dict[key1][key2]))"),
                         ("Wght. Ave. MTR on Charitable Contributions",
                          "'{:.2f}'.format(100 * charity_wmtr(calc_cl))"),
+                        ("Taxpayers Receiving CTC (millions)",
+                         "'{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6)"),
                         ("Reform",
                          "key1"),
                         ("Behavior",
                          "key2")])
-
-
 
 
 def num_charity(calc1):
@@ -221,13 +221,29 @@ def verb(n):
         return('cause no change')
 
 
-def header(doc):
+def header(doc, paper_title=paper_title):
     """
     Generate the header using PyLaTex.
     """
+    # Determine title size by length
+    if len(paper_title) <= 45:
+        paper_title_size = '\huge'
+    if len(paper_title) > 45:
+        paper_title_size = '\Large'
+        if ':' in paper_title:
+            global paper_title_list
+            paper_title_list = paper_title.split(':')
+            paper_title = paper_title_list[0] + ': \\' + paper_title_list[1]
+
+    paper_title = r'\textbf{' + paper_title_size + ' ' + paper_title + '}\\\\'
+    paper_title = (NoEscape(paper_title))
+
+    global paper_byline
+    paper_date = NoEscape(r'\today')
+    paper_byline = (r'{\small {{{{' + paper_author + ' } } } | { { { ' + paper_date + ' } } } | { { ' + paper_series + ' } }}}\\\\')
+    paper_byline = (NoEscape(paper_byline))
 
     doc.append(NoEscape(r'\noindent'))
-#     doc.append(NoEscape(r'\begin{spacing}{2.00}'))
     doc.append(NoEscape(r'\begin{tikzpicture}[remember picture, overlay]'))
     doc.append(NoEscape(r'\node[anchor = north west, inner sep = 0.25in] at ($(current page.north west) + (0.90in, -0.30in)$)'))
     doc.append(NoEscape(r'{\includegraphics[width=85px]{aei_logo2.jpg}};'))
