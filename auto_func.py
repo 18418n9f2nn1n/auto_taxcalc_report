@@ -393,7 +393,7 @@ def v_table(doc, policy_key=True):
         data_table.add_hline()
 
 
-def v2_table(doc, column_list=column_list, table_vars_dict=table_vars_dict):
+def v2_table(doc, column_list=column_list, table_vars_dict=table_vars_dict, column_label=column_label):
     """
     This function generates a table with the variables in 'column_list'
     ----------
@@ -406,15 +406,18 @@ def v2_table(doc, column_list=column_list, table_vars_dict=table_vars_dict):
     head_str = ""
     for var in column_list:
         head_str += " X[c]"
-        try:
-            token_list.append(table_vars_dict[var])
-        except ValueError:
-            print(var + ' is not a defined table variable. You must add it to the dictionary.')
+        token_list.append(table_vars_dict[var])
 
     # begin generating table
     with doc.create(LongTabu(head_str, row_height=2.0)) as data_table:
         data_table.add_hline()
-        data_table.add_row(column_list)
+
+        # change label of column list
+        column_list = column_list.pop(0)
+        column_list_adj = [column_label]
+        column_list_adj = column_list_adj.append(column_list)
+        data_table.add_row(column_list_adj)
+
         data_table.add_hline()
         for key in calc_dict:
             key1 = key
