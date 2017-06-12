@@ -35,12 +35,12 @@ table_vars_dict = dict([("10-Year Revenue Change, Dynamic (billions)",
                          "'{:,.1f}'.format(num_taxcut(calc_cl, calc_dict[key1][key2]) / 10.0**6)"),
                         ("Taxpayers Receiving Tax Hike (millions)",
                          "'{:,.1f}'.format(num_taxhike(calc_cl, calc_dict[key1][key2]) / 10.0**6)"),
+                        ("Taxpayers Receiving CTC (millions)",
+                         "'{:,.1f}'.format(num_ctc(calc_dict[key1][key2]) / 10.0**6)"),
                         ("Total Charitable Contributions (billions)",
                          "currency_fmt(num_charity(calc_dict[key1][key2]))"),
                         ("Wght. Ave. MTR on Charitable Contributions",
-                         "'{:.2f}'.format(100 * charity_wmtr(calc_cl))"),
-                        ("Taxpayers Receiving CTC (millions)",
-                         "'{:,.1f}'.format(num_ided(calc_dict[key1][key2]) / 10.0**6)"),
+                         "'{:.2f}'.format(100 * charity_wmtr(calc_dict[key1][key2]))"),
                         ("Reform",
                          "key1"),
                         ("Behavior",
@@ -90,6 +90,13 @@ def num_std(calc):
     std = (calc.records.s006[(calc.records.standard > 0.) *
            (calc.records.c00100 > 0.)].sum())
     return(std)
+
+def num_ctc(calc):
+    """
+    Calculate the number receiving Child Tax Credit
+    """
+    ctc = calc.records.s006[(calc.records.c07220 > 0.) * (calc.records.c00100 > 0.)].sum()
+    return(ctc)
 
 
 def no_inc_tax(calc):
@@ -413,9 +420,10 @@ def v2_table(doc, column_list=column_list, table_vars_dict=table_vars_dict, colu
         data_table.add_hline()
 
         # change label of column list
-        column_list = column_list.pop(0)
+        del column_list[0]
+        global column_list_adj
         column_list_adj = [column_label]
-        column_list_adj = column_list_adj.append(column_list)
+        column_list_adj = column_list_adj + column_list
         data_table.add_row(column_list_adj)
 
         data_table.add_hline()
