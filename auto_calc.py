@@ -157,7 +157,11 @@ assert calc_cl.current_year == start_year
 calc_cl.calc_all()
 print("Done")
 
-
+print("Begin generating calculators")
 dict_calculator(ref_dict, start_year, beh_dict, records_url)
+print("Done generating calculators")
+print("Ten year cost estimates")
 dict_ten_year_cost(calc_dict, calc_cl)
+print("Ten year cost estimates (with behavioral response)")
 dict_ten_year_cost_PE(calc_cl, tyc_beh, calc_dict)
+print("Done")
