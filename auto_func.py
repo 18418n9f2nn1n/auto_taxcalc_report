@@ -253,7 +253,7 @@ def header(doc, paper_title=paper_title):
     doc.append(NoEscape(r'\noindent'))
     doc.append(NoEscape(r'\begin{tikzpicture}[remember picture, overlay]'))
     doc.append(NoEscape(r'\node[anchor = north west, inner sep = 0.25in] at ($(current page.north west) + (0.90in, -0.30in)$)'))
-    doc.append(NoEscape(r'{\includegraphics[width=85px]{aei_logo2.jpg}};'))
+    doc.append(NoEscape(r'{\includegraphics[width=85px]{aei_logo.jpg}};'))
     doc.append(NoEscape(r'\end{tikzpicture}'))
     doc.append(NoEscape(r'\noindent'))
     doc.append(NoEscape(r'\\'))
@@ -503,7 +503,7 @@ def author(doc):
 def logo_footer(doc):
     doc.append(NoEscape(r'\begin{table}[!b]'))
     doc.append(NoEscape(r'\begin{longtabu}{X[c] X[c]}'))
-    doc.append(NoEscape(r'\includegraphics[width=80px]{aei_logo2.jpg} & \includegraphics[width=160px]{ospc_logo.png}\\%'))
+    doc.append(NoEscape(r'\includegraphics[width=80px]{aei_logo2.jpg} & \includegraphics[width=160px]{osp_logo.png}\\%'))
     doc.append(NoEscape(r' & \\%'))
     doc.append(NoEscape(r'\end{longtabu}%'))
     doc.append(NoEscape(r'\end{table}'))
