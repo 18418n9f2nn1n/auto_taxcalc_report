@@ -210,7 +210,7 @@ def currency_fmt(num):
     if num > 0:
         return('${:,.1f}'.format(num))
     if num < 0:
-        return('(${:,.1f})'.format(abs(num)))
+        return('-${:,.1f}'.format(abs(num)))
     if num == 0:
         return('${:,.1f}'.format(num))
 
